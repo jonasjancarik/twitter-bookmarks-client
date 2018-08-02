@@ -1,25 +1,33 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// import Bookmarks from '@/components/Bookmarks'
+import User from '@/components/User'
 import Bookmarks from '@/components/Bookmarks'
-import HelloWorld from '@/components/HelloWorld'
+import Favorites from '@/components/Favorites'
+// import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     // {
-    //   path: '/',
-    //   name: 'Bookmarks',
-    //   component: Bookmarks
+    //   path: '/helloworld',
+    //   name: 'HelloWorld',
+    //   component: HelloWorld
     // },
     {
-      path: '/helloworld',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path: '/:screenName',
+      name: 'User',
+      component: User
     },
     {
-      path: '/user/:screenName',
-      name: 'User',
+      path: '/:screenName/likes',
+      name: 'Favorites',
+      component: Favorites
+    },
+    {
+      path: '/:screenName/bookmarks',
+      name: 'Bookmarks',
       component: Bookmarks
     }
   ]

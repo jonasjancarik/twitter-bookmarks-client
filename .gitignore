@@ -17,3 +17,6 @@ firebase.json
 *.ntvs*
 *.njsproj
 *.sln
+
+# Deployment
+deploy.sh

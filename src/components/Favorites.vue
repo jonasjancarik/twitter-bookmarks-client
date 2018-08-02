@@ -7,20 +7,20 @@
         </b-row>
         <b-row>
           <b-col>
-                <h2>Bookmarks</h2>
+                <h2>Likes</h2>
           </b-col>
         </b-row>
-        <b-row>
-            <b-col  v-for="bookmark in bookmarks" :key="bookmark.id_str">
-              <blockquote class="twitter-tweet" data-width="auto">
-                <a :href="'https://twitter.com/placeholder/statuses/' + bookmark.id_str "></a>
+        <b-row v-for="favorite in favorites" :key="favorite" class="d-flex justify-content-center">
+            <b-col class="col-md-6 d-flex justify-content-center">
+              <blockquote class="twitter-tweet" data-width="550">
+                <a :href="'https://twitter.com/placeholder/statuses/' + favorite "></a>
               </blockquote>
-                <!-- <BookmarkCard :bookmark="bookmark"></BookmarkCard> -->
+                <!-- <BavouriteCard :favorite="favorite"></BavouriteCard> -->
             </b-col>
         </b-row>
-        <b-row v-if="hasNoBookmarks" class="my-5">
+        <b-row v-if="hasNoFavorites" class="my-5">
             <b-col class="text-center">
-                <p>You haven't bookmarked any tweets yet. Do it by mentioning @save_this in a reply to the tweet you want to bookmark.</p>
+                <p>You haven't favourited any tweets yet.</p>
             </b-col>
         </b-row>
         <b-row v-if="loaderShow" class="my-5">
@@ -32,42 +32,36 @@
 </template>
 
 <script>
-import BookmarksService from '@/services/BookmarksService'
+import FavoritesService from '@/services/FavoritesService'
 export default {
-  name: 'bookmarks',
+  name: 'favorites',
   data () {
     return {
-      bookmarks: [],
+      favorites: [],
       loaderShow: true,
       errorDisplay: '',
       noMoreResults: false,
       twitterWidgetLoaded: false,
-      hasNoBookmarks: false,
+      hasNoFavorites: false,
       screenName: this.$route.params.screenName
     }
   },
   mounted () {
-    this.getBookmarks()
+    this.getFavorites()
     window.addEventListener('scroll', this.handleScroll)
   },
   methods: {
-    async getBookmarks (removeOldResults) {
+    async getFavorites (removeOldResults) {
       if (!this.noMoreResults || (this.noMoreResults && removeOldResults)) {
         this.loaderShow = true
         this.noMoreResults = false
 
-        // if (this.$cookie.get('cookieConsent')) {
-        //   this.$cookie.set('siteNamesSelected', JSON.stringify(this.siteNamesSelected), 30)
-        //   this.$cookie.set('orientationSelected', this.orientationSelected, 30)
-        //   this.$cookie.set('sortBySelected', this.sortBySelected, 30)
-        // }
-
         try {
-          var response = await BookmarksService.fetchBookmarks({
+          var response = await FavoritesService.fetchFavorites({
             searchTerm: this.searchTerm,
             screen_name: this.screenName,
             sort: {_id: -1},
-            skip: removeOldResults ? 0 : this.bookmarks.length
+            skip: removeOldResults ? 0 : this.favorites.length
             // fields: 'id_str'
           })
         } catch (error) {
@@ -77,25 +71,25 @@ export default {
         }
 
         if (response && response.data.length !== 0) {
-          // load results into this.bookmarks
+          // load results into this.favorites
           if (removeOldResults) {
-            this.bookmarks = response.data
+            this.favorites = response.data
           } else {
-            this.bookmarks = this.bookmarks.concat(response.data)
+            this.favorites = this.favorites.concat(response.data)
           }
 
-          // for (const bookmark of this.bookmarks) {
-          //   // action to do for each bookmark
+          // for (const favorite of this.favorites) {
+          //   // action to do for each favorite
           // }
 
           this.loaderShow = false
 
-          if (response.data.length < 12) {
+          if (response.length < 12) {
             this.noMoreResults = true
           }
         } else {
-          if (this.bookmarks.length === 0) {
-            this.hasNoBookmarks = true
+          if (this.favorites.length === 0) {
+            this.hasNoFavorites = true
           }
           this.noMoreResults = true
           this.loaderShow = false
@@ -112,7 +106,7 @@ export default {
     handleScroll: function (event) {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         if (!this.loaderShow) {
-          this.getBookmarks()
+          this.getFavorites()
         }
       }
     }
