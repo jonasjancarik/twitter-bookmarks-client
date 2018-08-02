@@ -1,4 +1,4 @@
-# bkmrk-bot-mevn
+# twitter-bookmarks-client
 
 > A Vue.js project
 
