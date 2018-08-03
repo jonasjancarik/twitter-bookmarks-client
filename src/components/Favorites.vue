@@ -41,6 +41,7 @@ export default {
   components: {
     Tweet: Tweet
   },
+  // props: ['screenName'],
   data () {
     return {
       favorites: [],
@@ -114,6 +115,15 @@ export default {
           this.revealFavorites()
         }
       }
+    }
+  },
+  watch: {
+    '$route' (to, from) {
+      this.screenName = this.$route.params.screenName
+      this.favorites = []
+      this.favoritesRevealed = []
+      this.noMoreResults = false
+      this.getFavorites()
     }
   }
 }

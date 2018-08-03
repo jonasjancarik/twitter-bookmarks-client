@@ -119,6 +119,15 @@ export default {
         }
       }
     }
+  },
+  watch: {
+    '$route' (to, from) {
+      this.screenName = this.$route.params.screenName
+      this.bookmarks = []
+      this.bookmarksRevealed = []
+      this.noMoreResults = false
+      this.getBookmarks()
+    }
   }
 }
 </script>

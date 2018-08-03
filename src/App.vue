@@ -53,6 +53,12 @@ export default {
       }
       this.userTwitterData = response.data
     }
+  },
+  watch: {
+    '$route' (to, from) {
+      this.screenName = this.$route.params.screenName
+      this.getUser()
+    }
   }
 }
 </script>
