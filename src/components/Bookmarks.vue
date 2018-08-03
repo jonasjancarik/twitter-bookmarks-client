@@ -10,12 +10,9 @@
                 <h2>Bookmarks</h2>
           </b-col>
         </b-row>
-        <b-row>
-            <b-col  v-for="bookmark in bookmarks" :key="bookmark.id_str">
-              <blockquote class="twitter-tweet" data-width="auto">
-                <a :href="'https://twitter.com/placeholder/statuses/' + bookmark.id_str "></a>
-              </blockquote>
-                <!-- <BookmarkCard :bookmark="bookmark"></BookmarkCard> -->
+        <b-row v-for="bookmark in bookmarksRevealed" :key="bookmark.id_str" class="d-flex justify-content-center">
+            <b-col class="col-md-6 d-flex justify-content-center tweet-container">
+              <Tweet :id="bookmark.id_str"><div class="tweet-placeholder"><img style="max-height: 3em" src="../assets/spinner.gif" class="spinner"></div></Tweet>
             </b-col>
         </b-row>
         <b-row v-if="hasNoBookmarks" class="my-5">
@@ -23,7 +20,7 @@
                 <p>You haven't bookmarked any tweets yet. Do it by mentioning @save_this in a reply to the tweet you want to bookmark.</p>
             </b-col>
         </b-row>
-        <b-row v-if="loaderShow" class="my-5">
+        <b-row v-if="loadingBookmarks" class="my-5">
             <b-col class="text-center">
                 <img style="max-height: 3em" src="../assets/spinner.gif">
             </b-col>
@@ -33,12 +30,17 @@
 
 <script>
 import BookmarksService from '@/services/BookmarksService'
+import { Tweet } from 'vue-tweet-embed'
 export default {
   name: 'bookmarks',
+  components: {
+    Tweet: Tweet
+  },
   data () {
     return {
       bookmarks: [],
-      loaderShow: true,
+      bookmarksRevealed: [],
+      loadingBookmarks: true,
       errorDisplay: '',
       noMoreResults: false,
       twitterWidgetLoaded: false,
@@ -53,7 +55,7 @@ export default {
   methods: {
     async getBookmarks (removeOldResults) {
       if (!this.noMoreResults || (this.noMoreResults && removeOldResults)) {
-        this.loaderShow = true
+        this.loadingBookmarks = true
         this.noMoreResults = false
 
         // if (this.$cookie.get('cookieConsent')) {
@@ -72,7 +74,7 @@ export default {
           })
         } catch (error) {
           this.errorDisplay = error.message
-          this.loaderShow = false
+          this.loadingBookmarks = false
           console.error(error.message)
         }
 
@@ -88,7 +90,7 @@ export default {
           //   // action to do for each bookmark
           // }
 
-          this.loaderShow = false
+          this.loadingBookmarks = false
 
           if (response.data.length < 12) {
             this.noMoreResults = true
@@ -98,21 +100,22 @@ export default {
             this.hasNoBookmarks = true
           }
           this.noMoreResults = true
-          this.loaderShow = false
-        }
-
-        if (!this.twitterWidgetLoaded) {
-          let twitterWidgetScript = document.createElement('script')
-          twitterWidgetScript.setAttribute('src', 'https://platform.twitter.com/widgets.js')
-          document.body.appendChild(twitterWidgetScript)
-          this.twitterWidgetLoaded = true
+          this.loadingBookmarks = false
         }
       }
+      this.revealBookmarks()
+    },
+    revealBookmarks: function () {
+      this.bookmarks.slice(this.bookmarksRevealed.length, this.bookmarksRevealed.length + 10).forEach(element => {
+        this.bookmarksRevealed.push(element)
+      })
+      this.loadingBookmarks = false
     },
     handleScroll: function (event) {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        if (!this.loaderShow) {
-          this.getBookmarks()
+        if (!this.loadingBookmarks) {
+          this.loadingBookmarks = true
+          this.revealBookmarks()
         }
       }
     }
@@ -121,4 +124,19 @@ export default {
 </script>
 
 <style>
+
+.tweet-placeholder {
+  background-color: rgb(197, 197, 197);
+  width: 100%;
+  padding: 10em 0 5em 0;
+  border-bottom: solid rgb(97, 97, 97) 8em;
+  margin-bottom: 2em;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+.tweet-container > div {
+  width: 100%
+}
+
 </style>

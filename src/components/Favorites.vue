@@ -10,12 +10,14 @@
                 <h2>Likes</h2>
           </b-col>
         </b-row>
-        <b-row v-for="favorite in favorites" :key="favorite" class="d-flex justify-content-center">
-            <b-col class="col-md-6 d-flex justify-content-center">
-              <blockquote class="twitter-tweet" data-width="550">
+        <b-row v-for="favorite in favoritesRevealed" :key="favorite" class="d-flex justify-content-center">
+            <b-col class="col-md-6 d-flex justify-content-center tweet-container">
+              <!-- <blockquote class="twitter-tweet" data-width="550">
+                {{ favorite.text }}
                 <a :href="'https://twitter.com/placeholder/statuses/' + favorite "></a>
-              </blockquote>
-                <!-- <BavouriteCard :favorite="favorite"></BavouriteCard> -->
+              </blockquote> -->
+              <Tweet :id="favorite"><div class="tweet-placeholder"><img style="max-height: 3em" src="../assets/spinner.gif" class="spinner"></div></Tweet>
+                <!-- <FavoriteCard :favorite="favorite"></FavoriteCard> -->
             </b-col>
         </b-row>
         <b-row v-if="hasNoFavorites" class="my-5">
@@ -23,7 +25,7 @@
                 <p>You haven't favourited any tweets yet.</p>
             </b-col>
         </b-row>
-        <b-row v-if="loaderShow" class="my-5">
+        <b-row v-if="loadingFavorites" class="my-5">
             <b-col class="text-center">
                 <img style="max-height: 3em" src="../assets/spinner.gif">
             </b-col>
@@ -33,12 +35,17 @@
 
 <script>
 import FavoritesService from '@/services/FavoritesService'
+import { Tweet } from 'vue-tweet-embed'
 export default {
   name: 'favorites',
+  components: {
+    Tweet: Tweet
+  },
   data () {
     return {
       favorites: [],
-      loaderShow: true,
+      favoritesRevealed: [],
+      loadingFavorites: true,
       errorDisplay: '',
       noMoreResults: false,
       twitterWidgetLoaded: false,
@@ -53,7 +60,7 @@ export default {
   methods: {
     async getFavorites (removeOldResults) {
       if (!this.noMoreResults || (this.noMoreResults && removeOldResults)) {
-        this.loaderShow = true
+        this.loadingFavorites = true
         this.noMoreResults = false
 
         try {
@@ -66,7 +73,7 @@ export default {
           })
         } catch (error) {
           this.errorDisplay = error.message
-          this.loaderShow = false
+          this.loadingFavorites = false
           console.error(error.message)
         }
 
@@ -78,11 +85,7 @@ export default {
             this.favorites = this.favorites.concat(response.data)
           }
 
-          // for (const favorite of this.favorites) {
-          //   // action to do for each favorite
-          // }
-
-          this.loaderShow = false
+          this.loadingFavorites = false
 
           if (response.length < 12) {
             this.noMoreResults = true
@@ -92,21 +95,23 @@ export default {
             this.hasNoFavorites = true
           }
           this.noMoreResults = true
-          this.loaderShow = false
-        }
-
-        if (!this.twitterWidgetLoaded) {
-          let twitterWidgetScript = document.createElement('script')
-          twitterWidgetScript.setAttribute('src', 'https://platform.twitter.com/widgets.js')
-          document.body.appendChild(twitterWidgetScript)
-          this.twitterWidgetLoaded = true
+          this.loadingFavorites = false
         }
       }
+
+      this.revealFavorites()
+    },
+    revealFavorites: function () {
+      this.favorites.slice(this.favoritesRevealed.length, this.favoritesRevealed.length + 10).forEach(element => {
+        this.favoritesRevealed.push(element)
+      })
+      this.loadingFavorites = false
     },
     handleScroll: function (event) {
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        if (!this.loaderShow) {
-          this.getFavorites()
+        if (!this.loadingFavorites) {
+          this.loadingFavorites = true
+          this.revealFavorites()
         }
       }
     }
@@ -115,4 +120,19 @@ export default {
 </script>
 
 <style>
+
+.tweet-placeholder {
+  background-color: rgb(197, 197, 197);
+  width: 100%;
+  padding: 10em 0 5em 0;
+  border-bottom: solid rgb(97, 97, 97) 8em;
+  margin-bottom: 2em;
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+.tweet-container > div {
+  width: 100%
+}
+
 </style>

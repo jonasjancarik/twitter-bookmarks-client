@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <b-container fluid class="mb-5">
-      <b-row>
+      <b-row class="user-header">
         <b-col class="page-title text-center p-5" v-bind:style="{ 'background-image': 'url(' + userTwitterData.profile_banner_url + ')' }">
-          <img :src="userTwitterData.profile_image_url_https" alt="">
+          <a :href="'https://twitter.com/' + userTwitterData.screen_name"><b-img rounded="circle" class="profile-picture" :src="userTwitterData.profile_image_url_https.replace('_normal.jpg', '_400x400.jpg')" alt=""></b-img></a>
               <h1 class="">@{{ this.$route.params.screenName }}&rsquo;s Twitter Bookmarks</h1>
         </b-col>
       </b-row>
@@ -95,4 +95,9 @@ export default {
 .maxi-link p {
   color: rgb(202, 202, 202);
 }
+
+.user-header .profile-picture {
+  max-width: 12em;
+}
+
 </style>
