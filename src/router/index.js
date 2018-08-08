@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Bookmarks from '@/components/Bookmarks'
+import Home from '@/components/Home'
 import User from '@/components/User'
 import Bookmarks from '@/components/Bookmarks'
 import Favorites from '@/components/Favorites'
@@ -15,6 +15,11 @@ export default new Router({
     //   name: 'HelloWorld',
     //   component: HelloWorld
     // },
+    {
+      path: '',
+      name: 'Home',
+      component: Home
+    },
     {
       path: '/:screenName',
       name: 'User',

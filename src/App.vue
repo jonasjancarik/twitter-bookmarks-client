@@ -5,7 +5,7 @@
 
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-  <b-navbar-brand href="#">Twitter Bookmarks</b-navbar-brand>
+  <b-navbar-brand href="/">Twitter Bookmarks</b-navbar-brand>
 
   <b-collapse is-nav id="nav_collapse">
 
@@ -38,10 +38,10 @@
 <!-- navbar-1.vue -->
 
     <b-container fluid class="mb-5">
-      <b-row class="user-header">
+      <b-row v-if="(Object.keys(userTwitterData).length !== 0 && userTwitterData.constructor === Object)" class="user-header">
         <b-col class="page-title text-center p-5" v-bind:style="{ 'background-image': 'url(' + userTwitterData.profile_banner_url + ')' }">
           <a :href="'https://twitter.com/' + userTwitterData.screen_name">
-          <b-img rounded="circle" class="profile-picture mb-3" :src="userTwitterData.profile_image_url_https.replace('_normal.jpg', '_400x400.jpg')" alt=""></b-img>
+          <b-img rounded="circle" class="profile-picture mb-3" :src="userTwitterData.profile_image_url_https ? userTwitterData.profile_image_url_https.replace('_normal.jpg', '_400x400.jpg') : ''" alt=""></b-img>
           </a>
               <h1 class="">@{{ this.$route.params.screenName }}</h1>
         </b-col>
@@ -77,7 +77,9 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
+    if (this.screenName) {
+      this.getUser()
+    }
   },
   methods: {
     async getUser () {
