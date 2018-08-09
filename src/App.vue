@@ -10,8 +10,9 @@
   <b-collapse is-nav id="nav_collapse">
 
     <b-navbar-nav>
+            <b-nav-item :to="{ name: 'Bookmarks', params: { screenName: $route.params.screenName }}">Bookmarks</b-nav-item>
       <b-nav-item :to="{ name: 'Favorites', params: { screenName: $route.params.screenName }}">Likes</b-nav-item>
-      <b-nav-item :to="{ name: 'Bookmarks', params: { screenName: $route.params.screenName }}">Bookmarks</b-nav-item>
+
         <!-- <router-link tag="li" class="nav-item" :to="{ name: 'Favorites', params: { screenName: $route.params.screenName }}">
           <a class="nav-link">Likes</a>
           </router-link>

@@ -24,7 +24,7 @@ export default {
     onSubmit (evt) {
       evt.preventDefault()
       this.screenName = this.screenName.replace('@', '')
-      this.$router.push({ name: 'Favorites', params: { screenName: this.screenName } })
+      this.$router.push({ name: 'Bookmarks', params: { screenName: this.screenName } })
     }
   }
 }
