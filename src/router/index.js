@@ -1,24 +1,23 @@
 import Vue from 'vue'
+import Login from '@/components/Login'
 import Router from 'vue-router'
-import Home from '@/components/Home'
 import User from '@/components/User'
 import Bookmarks from '@/components/Bookmarks'
 import Favorites from '@/components/Favorites'
-// import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/helloworld',
-    //   name: 'HelloWorld',
-    //   component: HelloWorld
-    // },
     {
       path: '',
-      name: 'Home',
-      component: Home
+      name: 'HomeLogin',
+      component: Login
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/:screenName',
@@ -26,14 +25,29 @@ export default new Router({
       component: User
     },
     {
-      path: '/:screenName/likes',
+      path: '/user',
+      name: 'UserDefault',
+      component: User
+    },
+    {
+      path: '/likes',
       name: 'Favorites',
       component: Favorites
     },
+    // {
+    //   path: '/:screenName/likes',
+    //   name: 'FavoritesOtherUser',
+    //   component: Favorites
+    // },
     {
-      path: '/:screenName/bookmarks',
+      path: '/bookmarks',
       name: 'Bookmarks',
       component: Bookmarks
     }
+    //, {
+    //   path: '/:screenName/bookmarks',
+    //   name: 'BookmarksOtherUser',
+    //   component: Bookmarks
+    // }
   ]
 })

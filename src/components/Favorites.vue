@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="mt-5">
         <b-row v-if="errorDisplay">
             <b-col>
                 <b-alert show>Something went wrong :( {{ errorDisplay }}</b-alert>
@@ -41,7 +41,10 @@ export default {
   components: {
     Tweet: Tweet
   },
-  // props: ['screenName'],
+  props: {
+    user: Object,
+    userTwitterData: Object
+  },
   data () {
     return {
       favorites: [],
@@ -67,7 +70,7 @@ export default {
         try {
           var response = await FavoritesService.fetchFavorites({
             searchTerm: this.searchTerm,
-            screen_name: this.screenName,
+            screen_name: this.screenName || this.userTwitterData.screen_name,
             sort: {_id: -1},
             skip: removeOldResults ? 0 : this.favorites.length
             // fields: 'id_str'
@@ -118,13 +121,13 @@ export default {
     }
   },
   watch: {
-    '$route' (to, from) {
-      this.screenName = this.$route.params.screenName
-      this.favorites = []
-      this.favoritesRevealed = []
-      this.noMoreResults = false
-      this.getFavorites()
-    }
+    // '$route' (to, from) {
+    //   this.screenName = this.$route.params.screenName
+    //   this.favorites = []
+    //   this.favoritesRevealed = []
+    //   this.noMoreResults = false
+    //   this.getFavorites()
+    // }
   }
 }
 </script>

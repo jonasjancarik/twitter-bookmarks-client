@@ -1,5 +1,5 @@
 <template>
-    <b-container>
+    <b-container class="mt-5">
         <b-row v-if="errorDisplay">
             <b-col>
                 <b-alert show>Something went wrong :( {{ errorDisplay }}</b-alert>
@@ -36,6 +36,10 @@ export default {
   components: {
     Tweet: Tweet
   },
+  props: {
+    user: Object,
+    userTwitterData: Object
+  },
   data () {
     return {
       bookmarks: [],
@@ -58,16 +62,10 @@ export default {
         this.loadingBookmarks = true
         this.noMoreResults = false
 
-        // if (this.$cookie.get('cookieConsent')) {
-        //   this.$cookie.set('siteNamesSelected', JSON.stringify(this.siteNamesSelected), 30)
-        //   this.$cookie.set('orientationSelected', this.orientationSelected, 30)
-        //   this.$cookie.set('sortBySelected', this.sortBySelected, 30)
-        // }
-
         try {
           var response = await BookmarksService.fetchBookmarks({
             searchTerm: this.searchTerm,
-            screen_name: this.screenName,
+            screen_name: this.screenName || this.userTwitterData.screen_name,
             sort: {_id: -1},
             skip: removeOldResults ? 0 : this.bookmarks.length
             // fields: 'id_str'
@@ -121,13 +119,13 @@ export default {
     }
   },
   watch: {
-    '$route' (to, from) {
-      this.screenName = this.$route.params.screenName
-      this.bookmarks = []
-      this.bookmarksRevealed = []
-      this.noMoreResults = false
-      this.getBookmarks()
-    }
+    // '$route' (to, from) {
+    //   this.screenName = this.$route.params.screenName
+    //   this.bookmarks = []
+    //   this.bookmarksRevealed = []
+    //   this.noMoreResults = false
+    //   this.getBookmarks()
+    // }
   }
 }
 </script>
