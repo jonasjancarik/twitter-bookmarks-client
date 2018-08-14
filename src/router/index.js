@@ -21,12 +21,12 @@ export default new Router({
     },
     {
       path: '/:screenName',
-      name: 'User',
+      name: 'UserAnother',
       component: User
     },
     {
       path: '/user',
-      name: 'UserDefault',
+      name: 'User',
       component: User
     },
     {

@@ -5,7 +5,7 @@
 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-            <b-navbar-brand href="/">Twitter Bookmarks</b-navbar-brand>
+            <b-navbar-brand :to="{ name: 'Home' }">Twitter Bookmarks</b-navbar-brand>
 
             <b-collapse is-nav id="nav_collapse">
 
@@ -68,10 +68,10 @@ export default {
       if (user) {
         // this.user = firebase.auth().currentUser
         this.user = user
-        this.$router.push('/user')
+        this.$router.push({name: 'User'})
         this.getUser({ user_id: user.providerData[0].uid })
       } else {
-        this.$router.push('/login')
+        this.$router.push({name: 'Login'})
       }
     })
   },
