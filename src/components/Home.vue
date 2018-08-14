@@ -1,14 +1,19 @@
 <template>
 
 <b-container class="mt-5">
-  Hello, {{ $store.state.auth.user.displayName }}!
+
+    Hello!
+
+    <login></login>
+
 </b-container>
 
 </template>
 
 <script>
+import Login from '@/components/Login'
 export default {
-  name: 'front',
+  name: 'home',
   props: {
   },
   data () {
@@ -19,8 +24,7 @@ export default {
     // this.user = firebase.auth().currentUser
   },
   components: {
-    // Bookmarks,
-    // Favorites
+    Login: Login
   }
 }
 </script>

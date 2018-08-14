@@ -62,9 +62,10 @@ export default {
       if (user) {
         console.log('onAuthStateChanged')
         this.$router.push({name: 'User'})
-      } else {
-        this.$router.push({name: 'Login'})
       }
+      // else {
+      //   this.$router.push({name: 'Login'})
+      // }
     })
   },
   mounted () {
