@@ -1,7 +1,7 @@
 <template>
 
 <b-container class="mt-5">
-  Hello, {{ userTwitterData.name }}!
+  Hello, {{ $store.state.auth.user.displayName }}!
 </b-container>
 
 </template>

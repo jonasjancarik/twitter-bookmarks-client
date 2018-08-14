@@ -6,6 +6,7 @@ import router from './router'
 import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
+import createPersistedState from 'vuex-persistedstate'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(Vuex)
@@ -16,14 +17,14 @@ Vue.config.productionTip = false
 /* eslint-disable no-unused-vars */
 const store = new Vuex.Store({
   state: {
-    user: {},
     auth: {}
   },
   mutations: {
     updateAuth (state, payload) {
       state.auth = payload.data
     }
-  }
+  },
+  plugins: [createPersistedState()]
 })
 
 /* eslint-disable no-new */

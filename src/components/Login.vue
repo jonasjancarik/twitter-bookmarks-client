@@ -22,6 +22,7 @@ export default {
       signInFlow: 'popup',
       callbacks: {
         signInSuccessWithAuthResult: function (authResult) {
+          console.log('signInSuccessWithAuthResult')
           vm.$emit('updateAuthResult', authResult)
           vm.$store.commit({type: 'updateAuth', data: authResult})
           return true

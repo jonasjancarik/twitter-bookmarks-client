@@ -17,9 +17,9 @@
                 <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
 
-                <b-nav-item-dropdown v-if="(Object.keys(user).length !== 0 && typeof user === 'object')" right>
+                <b-nav-item-dropdown v-if="(typeof $store.state.auth === 'object' && Object.keys($store.state.auth).length !== 0)" right>
                   <template slot="button-content">
-                    <em>{{ user.displayName }}</em>
+                    <em>{{ $store.state.auth.user.displayName }}</em>
                   </template>
                   <b-dropdown-item :to="{ name: 'User' }">Profile</b-dropdown-item>
                   <b-dropdown-item @click="logOut()">Signout</b-dropdown-item>
@@ -43,7 +43,7 @@
             </b-row>
         </b-container>
 
-        <router-view v-bind:user="user" v-bind:userTwitterData="userTwitterData" @updateAuthResult="auth = $event"/>
+        <router-view v-bind:user="user" v-bind:userTwitterData="userTwitterData"/>
 
     </div>
 </template>
@@ -58,17 +58,14 @@ export default {
     return {
       userTwitterData: {},
       // screenName: this.$route.params.screenName,
-      user: {},
-      auth: {}
+      user: {}
     }
   },
   created () {
     firebase.initializeApp(config)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        // this.user = firebase.auth().currentUser
-        this.user = user
-        this.$store.user = user
+        console.log('onAuthStateChanged')
         this.$router.push({name: 'User'})
         this.getUser({ user_id: user.providerData[0].uid })
       } else {
