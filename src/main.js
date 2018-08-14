@@ -3,37 +3,34 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// import firebase from 'firebase'
-// // import firebaseui from 'firebaseui'
-// import { config } from './helpers/firebaseConfig'
+import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 // import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.use(Vuex)
 Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
+
+/* eslint-disable no-unused-vars */
+const store = new Vuex.Store({
+  state: {
+    user: {},
+    auth: {}
+  },
+  mutations: {
+    updateAuth (state, payload) {
+      state.auth = payload.data
+    }
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  data () {
-    return {
-      // user: {}
-    }
-  },
-  // created () {
-  //   firebase.initializeApp(config)
-  //   firebase.auth().onAuthStateChanged((user) => {
-  //     if (user) {
-  //       this.user = firebase.auth().currentUser
-  //       this.$router.push('/user')
-  //     } else {
-  //       this.$router.push('/login')
-  //     }
-  //   })
-  // },
+  store,
   components: { App },
   template: '<App/>'
 })

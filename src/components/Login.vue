@@ -23,6 +23,7 @@ export default {
       callbacks: {
         signInSuccessWithAuthResult: function (authResult) {
           vm.$emit('updateAuthResult', authResult)
+          vm.$store.commit({type: 'updateAuth', data: authResult})
           return true
         }
       }

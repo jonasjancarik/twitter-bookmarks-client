@@ -63,13 +63,12 @@ export default {
     }
   },
   created () {
-    console.log('User: ')
-    console.log(this.user)
     firebase.initializeApp(config)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // this.user = firebase.auth().currentUser
         this.user = user
+        this.$store.user = user
         this.$router.push({name: 'User'})
         this.getUser({ user_id: user.providerData[0].uid })
       } else {
@@ -92,8 +91,8 @@ export default {
     },
     logOut () {
       this.user = {}
-      this.data = {}
       this.userTwitterData = {}
+      this.$store.commit({type: 'updateAuth', data: {}})
       firebase.auth().signOut()
       this.$router.push({name: 'Login'})
     }
