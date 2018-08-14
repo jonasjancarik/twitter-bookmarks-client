@@ -21,7 +21,7 @@
                   <template slot="button-content">
                     <em>{{ user.displayName }}</em>
                   </template>
-                  <b-dropdown-item href="#">Profile</b-dropdown-item>
+                  <b-dropdown-item :to="{ name: 'User' }">Profile</b-dropdown-item>
                   <b-dropdown-item @click="logOut()">Signout</b-dropdown-item>
                 </b-nav-item-dropdown>
 
@@ -57,12 +57,14 @@ export default {
   data () {
     return {
       userTwitterData: {},
-      screenName: this.$route.params.screenName,
+      // screenName: this.$route.params.screenName,
       user: {},
       auth: {}
     }
   },
   created () {
+    console.log('User: ')
+    console.log(this.user)
     firebase.initializeApp(config)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -93,6 +95,7 @@ export default {
       this.data = {}
       this.userTwitterData = {}
       firebase.auth().signOut()
+      this.$router.push({name: 'Login'})
     }
   },
   watch: {
