@@ -8,6 +8,7 @@
         </b-row>
     </b-container>
 </template>
+
 <script>
 import firebase from 'firebase'
 import * as firebaseui from 'firebaseui'

@@ -28,22 +28,21 @@
                 </b-navbar-nav>
 
             </b-collapse>
+
         </b-navbar>
 
-        <!-- navbar-1.vue -->
-
-        <b-container fluid v-if="(Object.keys(userTwitterData).length !== 0 && user instanceof Object)">
+        <b-container fluid v-if="(Object.keys($store.state.auth).length !== 0 && $store.state.auth instanceof Object)">
             <b-row class="user-header">
-                <b-col class="page-title text-center p-5" v-bind:style="{ 'background-image': 'url(' + userTwitterData.profile_banner_url + ')' }">
-                    <a :href="'https://twitter.com/' + userTwitterData.screen_name">
-                        <b-img rounded="circle" class="profile-picture mb-3" :src="userTwitterData.profile_image_url_https ? userTwitterData.profile_image_url_https.replace('_normal.jpg', '_400x400.jpg') : ''" alt=""></b-img>
+                <b-col class="page-title text-center p-5" v-bind:style="{ 'background-image': 'url(' + this.$store.state.auth.additionalUserInfo.profile.profile_banner_url + ')' }">
+                    <a :href="'https://twitter.com/' + this.$store.state.auth.additionalUserInfo.profile.screen_name">
+                        <b-img rounded="circle" class="profile-picture mb-3" :src="this.$store.state.auth.additionalUserInfo.profile.profile_image_url_https ? this.$store.state.auth.additionalUserInfo.profile.profile_image_url_https.replace('_normal.jpg', '_400x400.jpg') : ''" alt=""></b-img>
                     </a>
-                    <h1 class="">@{{ userTwitterData.screen_name }}</h1>
+                    <h1 class="">@{{ this.$store.state.auth.additionalUserInfo.profile.screen_name }}</h1>
                 </b-col>
             </b-row>
         </b-container>
 
-        <router-view v-bind:user="user" v-bind:userTwitterData="userTwitterData"/>
+        <router-view/>
 
     </div>
 </template>
@@ -51,14 +50,10 @@
 <script>
 import firebase from 'firebase'
 import { config } from './helpers/firebaseConfig'
-import UserService from '@/services/UserService'
 export default {
   name: 'App',
   data () {
     return {
-      userTwitterData: {},
-      // screenName: this.$route.params.screenName,
-      user: {}
     }
   },
   created () {
@@ -67,7 +62,6 @@ export default {
       if (user) {
         console.log('onAuthStateChanged')
         this.$router.push({name: 'User'})
-        this.getUser({ user_id: user.providerData[0].uid })
       } else {
         this.$router.push({name: 'Login'})
       }
@@ -76,19 +70,7 @@ export default {
   mounted () {
   },
   methods: {
-    async getUser (options) {
-      try {
-        var response = await UserService.fetchUser(options)
-      } catch (error) {
-        this.errorDisplay = error.message
-        this.loaderShow = false
-        console.error(error.message)
-      }
-      this.userTwitterData = response.data
-    },
     logOut () {
-      this.user = {}
-      this.userTwitterData = {}
       this.$store.commit({type: 'updateAuth', data: {}})
       firebase.auth().signOut()
       this.$router.push({name: 'Login'})

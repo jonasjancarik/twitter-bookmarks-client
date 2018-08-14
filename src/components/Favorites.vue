@@ -42,8 +42,6 @@ export default {
     Tweet: Tweet
   },
   props: {
-    user: Object,
-    userTwitterData: Object
   },
   data () {
     return {
@@ -53,8 +51,7 @@ export default {
       errorDisplay: '',
       noMoreResults: false,
       twitterWidgetLoaded: false,
-      hasNoFavorites: false,
-      screenName: this.$route.params.screenName
+      hasNoFavorites: false
     }
   },
   mounted () {
@@ -70,10 +67,13 @@ export default {
         try {
           var response = await FavoritesService.fetchFavorites({
             searchTerm: this.searchTerm,
-            screen_name: this.screenName || this.userTwitterData.screen_name,
+            screen_name: this.$store.state.auth.additionalUserInfo.profile.screen_name,
             sort: {_id: -1},
-            skip: removeOldResults ? 0 : this.favorites.length
-            // fields: 'id_str'
+            skip: removeOldResults ? 0 : this.favorites.length,
+            twitterCredentials: {
+              accessToken: this.$store.state.auth.credential.accessToken,
+              secret: this.$store.state.auth.credential.secret
+            }
           })
         } catch (error) {
           this.errorDisplay = error.message

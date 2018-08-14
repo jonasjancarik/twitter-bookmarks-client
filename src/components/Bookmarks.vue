@@ -37,8 +37,6 @@ export default {
     Tweet: Tweet
   },
   props: {
-    user: Object,
-    userTwitterData: Object
   },
   data () {
     return {
@@ -48,8 +46,7 @@ export default {
       errorDisplay: '',
       noMoreResults: false,
       twitterWidgetLoaded: false,
-      hasNoBookmarks: false,
-      screenName: this.$route.params.screenName
+      hasNoBookmarks: false
     }
   },
   mounted () {
@@ -65,10 +62,13 @@ export default {
         try {
           var response = await BookmarksService.fetchBookmarks({
             searchTerm: this.searchTerm,
-            screen_name: this.screenName || this.userTwitterData.screen_name,
+            screen_name: this.$store.state.auth.additionalUserInfo.profile.screen_name,
             sort: {_id: -1},
-            skip: removeOldResults ? 0 : this.bookmarks.length
-            // fields: 'id_str'
+            skip: removeOldResults ? 0 : this.bookmarks.length,
+            twitterCredentials: {
+              accessToken: this.$store.state.auth.credential.accessToken,
+              secret: this.$store.state.auth.credential.secret
+            }
           })
         } catch (error) {
           this.errorDisplay = error.message
