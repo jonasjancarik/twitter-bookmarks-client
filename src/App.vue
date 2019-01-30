@@ -48,7 +48,9 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+// import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import { config } from './helpers/firebaseConfig'
 export default {
   name: 'App',
@@ -60,7 +62,6 @@ export default {
     firebase.initializeApp(config)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('onAuthStateChanged')
         this.$router.push({name: 'User'})
       }
       // else {

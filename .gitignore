@@ -20,3 +20,6 @@ firebase.json
 
 # Deployment
 deploy.sh
+
+# Build stats
+stats.json

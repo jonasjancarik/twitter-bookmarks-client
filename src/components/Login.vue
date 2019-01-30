@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 import * as firebaseui from 'firebaseui'
 export default {
   name: 'Login',
@@ -23,8 +24,6 @@ export default {
       signInFlow: 'popup',
       callbacks: {
         signInSuccessWithAuthResult: function (authResult) {
-          console.log('signInSuccessWithAuthResult')
-          vm.$emit('updateAuthResult', authResult)
           vm.$store.commit({type: 'updateAuth', data: authResult})
           return true
         }
